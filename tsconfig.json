@@ -66,8 +66,7 @@
   "exclude": [
     "node_modules"
   ],
-  "files": [
-    "./src/index.ts",
-    "./src/functions/create.ts"
+  "include": [
+    "./src/functions/*"
   ]
 }
