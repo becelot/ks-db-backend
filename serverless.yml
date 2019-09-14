@@ -14,6 +14,7 @@
 service: ks-db-backend
 
 plugins:
+  - serverless-webpack
   - serverless-dynamodb-local
   - serverless-offline
 
@@ -51,18 +52,14 @@ provider:
 
 # you can add packaging information here
 package:
-#  include:
-#    - dist/**
-#    - include-me-dir/**
+  individually: true
   exclude:
-    - src/**
-    - tsconfig.json
     - package.json
     - package-lock.json
 
 functions:
   hello:
-    handler: dist/functions/create.create
+    handler: src/functions/create.create
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
@@ -133,6 +130,10 @@ resources: # CloudFormation template syntax
           WriteCapacityUnits: 1
 
 custom:
+  webpack:
+    webpackConfig: 'webpack.config.js'
+    packager: 'npm'
+    includeModules: true
   dynamodb:
     # If you only want to use DynamoDB Local in some stages, declare them here
     stages:
