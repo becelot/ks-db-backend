@@ -10,6 +10,7 @@ module.exports = {
     mode: isLocal ? 'development' : 'production',
     entry: slsw.lib.entries,
     externals: [nodeExternals()],
+    devtool: "inline-source-map",
     resolve: {
         extensions: [ '.js', '.jsx', '.json', '.ts', '.tsx' ]
     },
