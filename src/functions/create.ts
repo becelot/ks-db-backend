@@ -2,8 +2,10 @@ import {DataMapper} from "@aws/dynamodb-data-mapper";
 import {Mapper} from "../utils/mapper";
 import {Document} from "../models/document";
 import {DocType} from "../models/document.type";
+import {APIGatewayEvent, APIGatewayProxyResult} from "aws-lambda";
+import {LambdaFunction} from "../utils/aws";
 
-export const create = async (event: any, context: any) => {
+export const create: LambdaFunction = async (event: APIGatewayEvent, context: any): Promise<APIGatewayProxyResult> => {
     const mapper: DataMapper = Mapper.Instance;
     const document: Document = new Document();
     document.name = 'TestFolder';
@@ -13,7 +15,7 @@ export const create = async (event: any, context: any) => {
     await mapper.put(document);
 
     return {
-        statusCode: '200',
+        statusCode: 200,
         body: 'Created folder'
     }
 };
