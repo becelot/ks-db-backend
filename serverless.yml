@@ -13,6 +13,10 @@
 
 service: ks-db-backend
 
+plugins:
+  - serverless-dynamodb-local
+  - serverless-offline
+
 # You can pin your service to only deploy with a specific Serverless version
 # Check out our docs for more details
 # frameworkVersion: "=X.X.X"
@@ -111,3 +115,33 @@ functions:
 #     NewOutput:
 #       Description: "Description for the output"
 #       Value: "Some output value"
+
+resources: # CloudFormation template syntax
+  Resources:
+    documents:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ks-db-documents
+        AttributeDefinitions:
+          - AttributeName: name
+            AttributeType: S
+        KeySchema:
+          - AttributeName: name
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+custom:
+  dynamodb:
+    # If you only want to use DynamoDB Local in some stages, declare them here
+    stages:
+      - dev
+    start:
+      port: 8000
+      inMemory: true
+      heapInitial: 200m
+      heapMax: 1g
+      migrate: true
+      seed: true
+      convertEmptyValues: true

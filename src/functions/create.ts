@@ -12,10 +12,10 @@ export const create: LambdaFunction = async (event: APIGatewayEvent, context: an
     document.children = [];
     document.type = DocType.DOC_FOLDER;
 
-    await mapper.put(document);
+    const answer = await mapper.put(document);
 
     return {
         statusCode: 200,
-        body: 'Created folder'
+        body: JSON.stringify(answer)
     }
 };
