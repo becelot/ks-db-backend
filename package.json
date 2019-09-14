@@ -4,7 +4,9 @@
   "description": "The backend for the code snippet database",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "deploy": "npm run build && sls deploy"
   },
   "repository": {
     "type": "git",
