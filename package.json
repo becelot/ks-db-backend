@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "deploy": "npm run build && sls deploy"
+    "deploy": "npm run build && sls deploy",
+    "dev": "webpack-dev-server --mode development"
   },
   "repository": {
     "type": "git",
@@ -25,19 +26,28 @@
   },
   "homepage": "https://github.com/becelot/ks-db-backend#readme",
   "devDependencies": {
+    "@babel/core": "^7.6.0",
     "@types/aws-lambda": "^8.10.31",
     "@types/aws-sdk": "^2.7.0",
     "@types/node": "^12.7.5",
     "aws-sdk": "^2.527.0",
+    "babel-loader": "^8.0.6",
+    "cache-loader": "^4.1.0",
+    "fork-ts-checker-webpack-plugin": "^1.5.0",
     "serverless-dynamodb-local": "^0.2.38",
     "serverless-offline": "^5.11.0",
+    "serverless-webpack": "^5.3.1",
+    "ts-loader": "^6.1.0",
     "ts-node": "^8.3.0",
-    "typescript": "^3.6.3"
+    "typescript": "^3.6.3",
+    "webpack": "^4.40.2",
+    "webpack-cli": "^3.3.8",
+    "webpack-dev-server": "^3.8.0",
+    "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
     "@aws/dynamodb-data-mapper": "^0.7.3",
     "@aws/dynamodb-data-mapper-annotations": "^0.7.3",
-    "@aws/dynamodb-data-marshaller": "^0.7.3",
-    "serverless-dynamodb-client": "0.0.2"
+    "@aws/dynamodb-data-marshaller": "^0.7.3"
   }
 }

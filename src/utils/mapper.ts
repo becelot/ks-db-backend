@@ -1,8 +1,6 @@
 import {DataMapper} from "@aws/dynamodb-data-mapper";
 import {DynamoDB} from "aws-sdk";
 
-let dynamodb = require('serverless-dynamodb-client');
-
 export class Mapper {
     private static _instance: Mapper;
 
@@ -10,7 +8,10 @@ export class Mapper {
 
     private constructor() {
         this._mapper = new DataMapper({
-            client: dynamodb.raw
+            client: process.env.IS_OFFLINE ? new DynamoDB({
+                region: "localhost",
+                endpoint: "http://localhost:8000"
+            }) : new DynamoDB({region: 'us-east-1'})
         })
     }
 
