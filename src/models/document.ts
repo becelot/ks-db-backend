@@ -8,11 +8,14 @@ export class Document {
     @hashKey()
     name: string;
 
-    @rangeKey({defaultProvider: () => new Date()})
+    @attribute({defaultProvider: () => new Date()})
     created: Date;
 
     @attribute()
     type: DocType;
+
+    @attribute({defaultProvider: () => ''})
+    parent: string;
 
     @attribute()
     content?: string;
