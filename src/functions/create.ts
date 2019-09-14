@@ -14,6 +14,6 @@ export const create = async (event: any, context: any) => {
 
     return {
         statusCode: '200',
-        message: 'Created folder'
+        body: 'Created folder'
     }
 };
