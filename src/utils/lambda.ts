@@ -5,7 +5,14 @@ export type RestApiEvent<Input> = Omit<APIGatewayEvent, 'body'> & { body: Input 
 export type RestApiOutput<Output> = Omit<APIGatewayProxyResult, 'body'> & { body: Output };
 
 export abstract class AwsLambda<Input, Output> {
+    private context: APIGatewayEventRequestContext;
     public async abstract perform(input: RestApiEvent<Input>): Promise<RestApiOutput<Output>>;
+
+    public get CurrentUserName(): string {
+        return this.context.authorizer
+            && this.context.authorizer.claims
+            && this.context.authorizer.claims['cognito:username'];
+    }
 
     protected responseBuilder(statusCode: number, response: Output) {
         return {
@@ -20,6 +27,8 @@ export abstract class AwsLambda<Input, Output> {
                 Object.assign({}, event),
                 {body: !!event.body ? JSON.parse(event.body) : {}}
                 );
+
+        this.context = event.requestContext;
         const response: RestApiOutput<Output> = await this.perform(obj);
         return {
             ...response,
