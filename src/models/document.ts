@@ -11,7 +11,7 @@ export class Document {
     @attribute({defaultProvider: () => new Date()})
     created: Date;
 
-    @attribute()
+    @attribute({type: 'Number'})
     type: DocType;
 
     @attribute({defaultProvider: () => ''})
@@ -21,5 +21,5 @@ export class Document {
     content?: string;
 
     @attribute({memberType: 'String'})
-    children?: string[];
+    children: Set<string>;
 }

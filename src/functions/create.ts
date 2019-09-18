@@ -98,9 +98,9 @@ class CreateDocument extends AwsLambda<ICreateDocument, ICreateDocumentResp> {
 
         if (!!parentFolder) {
             if (!!parentFolder.children) {
-                parentFolder.children.push(query.name);
+                parentFolder.children.add(query.name);
             } else {
-                parentFolder.children = [query.name];
+                parentFolder.children = new Set<string>(query.name); // [query.name];
             }
         }
 
