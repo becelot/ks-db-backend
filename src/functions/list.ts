@@ -30,27 +30,28 @@ class ListDocuments extends AwsLambda<IListDocuments, IListDocumentsResp> {
         const userName = this.CurrentUserName;
 
         const query: Document = new Document();
-        query.name = userName + '/' + input.body.folder;
+        query.name = userName + (input.body.folder === '' ? '' : '/' + input.body.folder);
 
         const parent: Document = await Mapper.Instance.get(query);
-
         if (parent.type === DocType.DOC_FOLDER) {
             if (!parent.children) {
-                parent.children = [];
+                parent.children = new Set<string>();
             }
 
             const children: string[] = [];
-            parent.children.forEach(child => children.push(parent.name + '/' + child));
+            parent.children.forEach(child => children.push(child));
+
 
             const docs: Array<{
                 name: string;
                 type: DocType;
             }> = [];
 
-            for (let child in children) {
-                const res = await Mapper.Instance.get(Object.assign(new Document(), child));
+
+            for (let child of children) {
+                const res = await Mapper.Instance.get(Object.assign(new Document(), {name: parent.name + '/' + child}));
                 docs.push({
-                    name: res.name,
+                    name: child,
                     type: res.type
                 });
             }
