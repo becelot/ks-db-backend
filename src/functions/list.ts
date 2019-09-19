@@ -18,8 +18,7 @@ interface IListDocumentsResp {
 
 class ListDocuments extends AwsLambda<IListDocuments, IListDocumentsResp> {
     async perform(input: RestApiEvent<IListDocuments>): Promise<RestApiOutput<IListDocumentsResp>> {
-
-        if (!!input.body.folder) {
+        if (input.body.folder === undefined) {
             return this.responseBuilder(500, {
                 successful: false,
                 documents: [],
@@ -31,6 +30,7 @@ class ListDocuments extends AwsLambda<IListDocuments, IListDocumentsResp> {
 
         const query: Document = new Document();
         query.name = userName + (input.body.folder === '' ? '' : '/' + input.body.folder);
+        console.log(query.name);
 
         const parent: Document = await Mapper.Instance.get(query);
         if (parent.type === DocType.DOC_FOLDER) {
