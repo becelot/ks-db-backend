@@ -46,7 +46,9 @@ class CreateDocument extends AwsLambda<ICreateDocument, ICreateDocumentResp> {
             });
         }
 
-        query.name = input.body.parentFolder;
+        const parentFolderName = this.CurrentUserName + (input.body.parentFolder === '' ? '' : '/' + input.body.parentFolder);
+
+        query.name = parentFolderName;
         let parentFolder: Document | undefined = undefined;
 
         // If the file is created in another folder
@@ -94,14 +96,16 @@ class CreateDocument extends AwsLambda<ICreateDocument, ICreateDocumentResp> {
 
         query.type = input.body.type;
         query.created = new Date(input.body.date);
-        query.parent = input.body.parentFolder;
+        query.parent = parentFolderName;
 
         if (!!parentFolder) {
             if (!!parentFolder.children) {
-                parentFolder.children.add(query.name);
+                parentFolder.children.add(input.body.documentName);
             } else {
-                parentFolder.children = new Set<string>(query.name); // [query.name];
+                parentFolder.children = new Set<string>(input.body.documentName); // [query.name];
             }
+
+            await Mapper.Instance.update(parentFolder);
         }
 
         try {
