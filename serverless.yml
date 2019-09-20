@@ -115,7 +115,7 @@ functions:
             type: COGNITO_USER_POOLS
             arn: arn:aws:cognito-idp:us-east-1:782867332842:userpool/us-east-1_lgelfQeHN
   content:
-    handler: src/functions/document_content.content
+    handler: src/functions/get_document.get_document
     #    The following are a few example events you can configure
     #    NOTE: Please make sure to change your handler code to work with those events
     #    Check the event documentation for details
