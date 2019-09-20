@@ -102,7 +102,8 @@ class CreateDocument extends AwsLambda<ICreateDocument, ICreateDocumentResp> {
             if (!!parentFolder.children) {
                 parentFolder.children.add(input.body.documentName);
             } else {
-                parentFolder.children = new Set<string>(input.body.documentName); // [query.name];
+                parentFolder.children = new Set<string>(); // [query.name];
+                parentFolder.children.add(input.body.documentName);
             }
 
             await Mapper.Instance.update(parentFolder);
