@@ -46,29 +46,31 @@ class CreateDocument extends AwsLambda<ICreateDocument, ICreateDocumentResp> {
             });
         }
 
-        const parentFolderName = this.CurrentUserName + (input.body.parentFolder === '' ? '' : '/' + input.body.parentFolder);
+        // Use root folder if none was provided
+        if (input.body.parentFolder === undefined) {
+            input.body.parentFolder = '';
+        }
+
+        const parentFolderName = this.CurrentUserName + input.body.parentFolder;
 
         query.name = parentFolderName;
         let parentFolder: Document | undefined = undefined;
 
-        // If the file is created in another folder
-        if (!!input.body.parentFolder) {
-            // Check if the parent exists and is a folder
-            try {
-                parentFolder = await mapper.get<Document>(query);
-                if (parentFolder.type === DocType.DOC_FILE) {
-                    return this.responseBuilder(500, {
-                        sucessfull: false,
-                        reason: 'The selected parent document is a file, not a folder'
-                    });
-                }
-            } catch (e) {
-                // Folder does not exist
+        // Check if the parent exists and is a folder
+        try {
+            parentFolder = await mapper.get<Document>(query);
+            if (parentFolder.type === DocType.DOC_FILE) {
                 return this.responseBuilder(500, {
                     sucessfull: false,
-                    reason: 'The selected folder does not exist.'
+                    reason: 'The selected parent document is a file, not a folder'
                 });
             }
+        } catch (e) {
+            // Folder does not exist
+            return this.responseBuilder(500, {
+                sucessfull: false,
+                reason: 'The selected folder does not exist.'
+            });
         }
 
 

@@ -40,7 +40,7 @@ class GetDocument extends AwsLambda<IGetDocument, IGetDocumentResponse> {
         const userName = this.CurrentUserName;
 
         const query: Document = new Document();
-        query.name = userName + (input.body.path === '' ? '' : '/' + input.body.path);
+        query.name = userName + input.body.path;
 
         const parent: Document = await Mapper.Instance.get(query);
 

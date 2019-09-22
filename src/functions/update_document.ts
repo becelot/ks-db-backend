@@ -26,7 +26,7 @@ class UpdateDocument extends AwsLambda<IUpdateDocument, IUpdateDocumentResponse>
         // Get document
         const userName = this.CurrentUserName;
         const query: Document = new Document();
-        query.name = userName + (input.body.path === '' ? '' : '/' + input.body.path);
+        query.name = userName + input.body.path;
 
         const document: Document = await Mapper.Instance.get(query);
 
