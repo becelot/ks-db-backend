@@ -17,6 +17,10 @@ export abstract class AwsLambda<Input, Output> {
     protected responseBuilder(statusCode: number, response: Output) {
         return {
             statusCode,
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': true,
+            },
             body: response
         };
     }
