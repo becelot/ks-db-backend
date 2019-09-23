@@ -42,7 +42,17 @@ class GetDocument extends AwsLambda<IGetDocument, IGetDocumentResponse> {
         const query: Document = new Document();
         query.name = userName + input.body.path;
 
-        const parent: Document = await Mapper.Instance.get(query);
+        let parent: Document;
+        try {
+            parent = await Mapper.Instance.get(query);
+        } catch (e) {
+            return this.responseBuilder(500, {
+                successful: false,
+                documents: [],
+                error: 'Document does not exist on the server'
+            });
+        }
+
 
         // if the document is a folder, prepare a folder reply
         if (parent.type === DocType.DOC_FOLDER) {
