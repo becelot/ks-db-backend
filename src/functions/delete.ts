@@ -1,6 +1,7 @@
 import {AwsLambda, RestApiEvent, RestApiOutput, toLambda} from "../utils/lambda";
 import {Document} from "../models/document";
 import {Mapper} from "../utils/mapper";
+import {DocType} from "../models/document.type";
 
 interface IDeleteDocument {
     path: string;
@@ -31,19 +32,10 @@ class DeleteDocument extends AwsLambda<IDeleteDocument, IDeleteDocumentResponse>
         return [path.slice(0, index), path.slice(index + 1, path.length)];
     }
 
-    async perform(input: RestApiEvent<IDeleteDocument>): Promise<RestApiOutput<IDeleteDocumentResponse>> {
-
-        // Check input parameters
-        if (!input.body.path) {
-            return this.responseBuilder(500, {
-                successful: false,
-                error: 'Could not delete the root directory'
-            });
-        }
-
+    private async deleteFile(path: string): Promise<RestApiOutput<IDeleteDocumentResponse>> {
         let fileInfo: [string, string];
         try {
-            fileInfo = this.getPathInfo(this.CurrentUserName + input.body.path);
+            fileInfo = this.getPathInfo(path);
         } catch (e) {
             return this.responseBuilder(500, {
                 successful: false,
@@ -52,7 +44,7 @@ class DeleteDocument extends AwsLambda<IDeleteDocument, IDeleteDocumentResponse>
         }
 
         // Check, if document exists
-        let document: Document = Object.assign(new Document(), {name: this.CurrentUserName + input.body.path});
+        let document: Document = Object.assign(new Document(), {name: path});
         try {
             document = await Mapper.Instance.get(document);
         } catch (e) {
@@ -74,6 +66,17 @@ class DeleteDocument extends AwsLambda<IDeleteDocument, IDeleteDocumentResponse>
             });
         }
 
+        // If document is a folder, also delete all its children
+        let success = true;
+        if (document.type === DocType.DOC_FOLDER && document.children) {
+            for (const child of document.children) {
+                const res = await this.deleteFile(document.name + '/' + child);
+                if (res.statusCode !== 200) {
+                    success = false;
+                }
+            }
+        }
+
         if (!parent.children.delete(fileInfo[1])) {
             return this.responseBuilder(500, {
                 successful: false,
@@ -84,9 +87,24 @@ class DeleteDocument extends AwsLambda<IDeleteDocument, IDeleteDocumentResponse>
         await Mapper.Instance.update(parent);
         await Mapper.Instance.delete(document);
 
+        const error = success ? undefined : 'Not all files in the folder could be deleted';
         return this.responseBuilder(200, {
-            successful: true
+            successful: success,
+            error
         });
+    }
+
+    async perform(input: RestApiEvent<IDeleteDocument>): Promise<RestApiOutput<IDeleteDocumentResponse>> {
+
+        // Check input parameters
+        if (!input.body.path) {
+            return this.responseBuilder(500, {
+                successful: false,
+                error: 'Could not delete the root directory'
+            });
+        }
+
+        return this.deleteFile(this.CurrentUserName + input.body.path);
     }
 
 }
