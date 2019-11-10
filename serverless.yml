@@ -193,6 +193,19 @@ resources: # CloudFormation template syntax
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+    sso:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ks-db-sso
+        AttributeDefinitions:
+          - AttributeName: user
+            AttributeType: S
+        KeySchema:
+          - AttributeName: user
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
 
 custom:
   webpack:
