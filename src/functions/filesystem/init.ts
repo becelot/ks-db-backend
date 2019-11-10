@@ -1,8 +1,8 @@
-import {AwsLambda, RestApiOutput, toLambda} from "../utils/lambda";
+import {AwsLambda, RestApiOutput, toLambda} from "../../utils/lambda";
 import {APIGatewayProxyEvent} from "aws-lambda";
-import {Mapper} from "../utils/mapper";
-import {Document} from "../models/document";
-import {DocType} from "../models/document.type";
+import {Mapper} from "../../utils/mapper";
+import {Document} from "../../models/document";
+import {DocType} from "../../models/document.type";
 
 
 class InitDatabase extends AwsLambda<{}, {}> {

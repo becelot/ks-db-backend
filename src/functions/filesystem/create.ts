@@ -1,8 +1,8 @@
 import {DataMapper} from "@aws/dynamodb-data-mapper";
-import {Mapper} from "../utils/mapper";
-import {Document} from "../models/document";
-import {DocType} from "../models/document.type";
-import {AwsLambda, RestApiEvent, RestApiOutput, toLambda} from "../utils/lambda";
+import {Mapper} from "../../utils/mapper";
+import {Document} from "../../models/document";
+import {DocType} from "../../models/document.type";
+import {AwsLambda, RestApiEvent, RestApiOutput, toLambda} from "../../utils/lambda";
 
 interface ICreateDocument {
     documentName: string;

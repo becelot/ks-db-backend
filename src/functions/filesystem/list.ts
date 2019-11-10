@@ -1,7 +1,7 @@
-import {AwsLambda, RestApiEvent, RestApiOutput, toLambda} from "../utils/lambda";
-import {DocType} from "../models/document.type";
-import {Document} from "../models/document";
-import {Mapper} from "../utils/mapper";
+import {AwsLambda, RestApiEvent, RestApiOutput, toLambda} from "../../utils/lambda";
+import {DocType} from "../../models/document.type";
+import {Document} from "../../models/document";
+import {Mapper} from "../../utils/mapper";
 
 interface IListDocuments {
     folder: string;

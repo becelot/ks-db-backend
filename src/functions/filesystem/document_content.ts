@@ -1,4 +1,4 @@
-import {AwsLambda, RestApiEvent, RestApiOutput, toLambda} from "../utils/lambda";
+import {AwsLambda, RestApiEvent, RestApiOutput, toLambda} from "../../utils/lambda";
 
 interface IDocContents {
     document: string;

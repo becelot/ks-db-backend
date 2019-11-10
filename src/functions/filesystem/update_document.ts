@@ -1,7 +1,7 @@
-import {AwsLambda, RestApiEvent, RestApiOutput, toLambda} from "../utils/lambda";
-import {Document} from "../models/document";
-import {Mapper} from "../utils/mapper";
-import {DocType} from "../models/document.type";
+import {AwsLambda, RestApiEvent, RestApiOutput, toLambda} from "../../utils/lambda";
+import {Document} from "../../models/document";
+import {Mapper} from "../../utils/mapper";
+import {DocType} from "../../models/document.type";
 
 interface IUpdateDocument {
     path: string;
