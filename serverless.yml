@@ -185,6 +185,27 @@ functions:
           path: sso/init
           method: get
           integration: lambda-proxy
+  get-sso-accounts:
+    handler: src/functions/sso/accounts.get_accounts
+    role: arn:aws:iam::782867332842:role/LambdaDynamoAccess
+    events:
+      - http:
+          path: sso/accounts
+          method: get
+          integration: lambda-proxy
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+            allowCredentials: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            arn: arn:aws:cognito-idp:us-east-1:782867332842:userpool/us-east-1_lgelfQeHN
 
 resources: # CloudFormation template syntax
   Resources:
