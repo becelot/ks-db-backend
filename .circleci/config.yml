@@ -1,0 +1,25 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/backend
+    branches:
+      only:
+        - master
+    docker:
+      - image: becelot/awscli-node
+    steps:
+      - checkout
+      - restore_cache:
+            keys:
+                - v1-npm-deps-{{ checksum "package-lock.json" }}
+                - v1-npm-deps-
+      - run:
+          name: Install dependencies
+          command: |
+            npm install
+      - save_cache: # cache Python dependencies using checksum of Pipfile as the cache-key
+            key: v1-npm-deps-{{ checksum "package-lock.json" }}
+      - run:
+          name: Deploy
+          command: |
+            npx sls deploy
