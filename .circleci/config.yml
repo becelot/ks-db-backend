@@ -2,9 +2,6 @@ version: 2
 jobs:
   build:
     working_directory: ~/backend
-    branches:
-      only:
-        - master
     docker:
       - image: becelot/awscli-node
     steps:
@@ -27,9 +24,6 @@ jobs:
             export NODE_OPTIONS=--max-old-space-size=4096
             npx sls package
   deploy:
-    branches:
-      only:
-        - master
     machine:
       enabled: true
     working_directory: ~/backend
