@@ -22,28 +22,4 @@ jobs:
           name: Package
           command: |
             export NODE_OPTIONS=--max-old-space-size=4096
-            npx sls package
-  deploy:
-    machine:
-      enabled: true
-    working_directory: ~/backend
-    steps:
-      - checkout
-      - run:
-          name: Deploy to AWS
-          command: |
-            export NODE_OPTIONS=--max-old-space-size=4096
             npx sls deploy
-
-workflows:
-  version: 2
-  build-and-deploy:
-    jobs:
-      - build
-      - deploy:
-          requires:
-            - build
-          filters:
-            branches:
-              only:
-                - master
