@@ -52,7 +52,6 @@ provider:
 
 # you can add packaging information here
 package:
-  individually: true
   exclude:
     - package.json
     - package-lock.json
